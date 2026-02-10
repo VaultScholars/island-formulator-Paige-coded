@@ -23,6 +23,7 @@
     "PORT": "3000",
     "VISUAL": "code --wait",
     "SOLID_QUEUE_IN_PUMA": "1",
+	"DATABASE_URL": "postgres://postgres:postgres@postgres:5432/island_formulator_development",
     "BUNDLER_EDITOR": "code"
 	},
   "customizations": {
