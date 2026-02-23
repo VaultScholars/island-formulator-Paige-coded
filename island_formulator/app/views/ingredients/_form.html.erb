@@ -34,4 +34,22 @@
   <div class="inline">
     <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
   </div>
+  <div class="mb-4">
+  <%= form.label :tag_ids, "Benefits & Properties", class: "block font-bold mb-2" %>
+  <div class="grid grid-cols-2 gap-2">
+    <%# collection_check_boxes is a powerful Rails helper that generates all the checkboxes for us! %>
+    <%# It takes 4 main arguments: 
+        1. The field name (:tag_ids)
+        2. The collection to loop through (Tag.all)
+        3. The value to save (:id)
+        4. The text to show the user (:name)
+    %>
+    <%= form.collection_check_boxes :tag_ids, Tag.all, :id, :name do |cb| %>
+      <div class="flex items-center">
+        <%= cb.check_box class: "w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" %>
+        <%= cb.label class: "ml-2 text-sm text-gray-700" %>
+      </div>
+    <% end %>
+  </div>
+</div>
 <% end %>
