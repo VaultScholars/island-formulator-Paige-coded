@@ -15,6 +15,8 @@ class IngredientsController < ApplicationController
     @ingredient = Ingredient.new
   end
 
+  
+
   # GET /ingredients/1/edit
   def edit
   end
@@ -72,5 +74,8 @@ class IngredientsController < ApplicationController
   # The [] means we are expecting an ARRAY of IDs (since you can check multiple boxes).
   # Note: tag_ids: [] must be the LAST parameter in the permit() call
   params.expect(ingredient: [ :name, :category, :description, :notes, tag_ids: [] ])
+    end
+    def ingredient_params
+  params.require(:ingredient).permit(:name, :category, :description, :photo)
     end
 end
