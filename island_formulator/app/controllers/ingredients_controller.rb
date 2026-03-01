@@ -1,9 +1,10 @@
 class IngredientsController < ApplicationController
+  before_action :require_authentication  
   before_action :set_ingredient, only: %i[ show edit update destroy ]
 
   # GET /ingredients or /ingredients.json
   def index
-    @ingredients = Ingredient.all
+    @ingredients = current_user.ingredients
   end
 
   # GET /ingredients/1 or /ingredients/1.json
@@ -12,7 +13,7 @@ class IngredientsController < ApplicationController
 
   # GET /ingredients/new
   def new
-    @ingredient = Ingredient.new
+    @ingredient = current_user.ingredients.build
   end
 
   
@@ -23,7 +24,14 @@ class IngredientsController < ApplicationController
 
   # POST /ingredients or /ingredients.json
   def create
-    @ingredient = Ingredient.new(ingredient_params)
+    @ingredient = current_user.ingredients.build(ingredient_params)
+
+    if @ingredient.save
+      redirect_to @ingredient, notice: "Ingredient was successfully created."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
 
     respond_to do |format|
       if @ingredient.save
@@ -78,4 +86,14 @@ class IngredientsController < ApplicationController
     def ingredient_params
   params.require(:ingredient).permit(:name, :category, :description, :photo)
     end
+end
+ private
+
+  def set_ingredient
+    @ingredient = current_user.ingredients.find(params[:id])  # Was: Ingredient.find(params[:id])
+  end
+
+  def ingredient_params
+    params.require(:ingredient).permit(:name, :category, :description, :notes, :photo, tag_ids: [])
+  end
 end
