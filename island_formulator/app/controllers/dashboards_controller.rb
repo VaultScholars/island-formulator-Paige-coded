@@ -9,5 +9,11 @@ class DashboardsController < ApplicationController
       inventory: current_user.inventory_items.count,
       batches: current_user.batches.count
     }
+     # Suggested Recipes feature
+     @suggested_recipes = current_user.recipes.select do |recipe|
+    recipe.ingredients.all? do |ingredient|
+      inventory = current_user.inventory_items.find_by(ingredient_id: ingredient.id)
+      inventory.present? && inventory.quantity >= ingredient.quantity
+    end
   end
 end
