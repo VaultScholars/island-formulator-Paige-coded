@@ -69,11 +69,28 @@
   </div>
 </div>
 
-<%# Current: blue, green, yellow, purple %>
-<div class="bg-white p-6 rounded-lg shadow border-t-4 border-pink-500">  <%# Changed to pink %>
-<%# Before %>
-<%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white..." %>
+<h2 class="text-xl font-bold mb-4">Log a Batch for <%= @recipe.name %></h2>
 
-<%# After %>
-<%= form.submit class: "rounded-lg py-3 px-5 bg-emerald-600 text-white..." %>
-oklch(69.6% 0.17 162.48)
+<%= form_with(model: @batch, url: batches_path, local: true, class: "contents") do |form| %>
+  <% if @batch.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(@batch.errors.count, "error") %> prohibited this batch from being saved:</h2>
+      <ul class="list-disc ml-6">
+        <% @batch.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Pass recipe_id hidden so Rails knows which recipe this batch belongs to -->
+  <%= form.hidden_field :recipe_id, value: @recipe.id %>
+
+  <!-- Default made_on to today -->
+  <%= form.date_field :made_on, value: Date.today, class: "mt-2 mb-2" %>
+
+  <!-- Optional notes -->
+  <%= form.text_area :notes, placeholder: "Add notes (optional)", class: "w-full border rounded p-2 mb-2" %>
+
+  <%= form.submit "Log Batch", class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+<% end %>

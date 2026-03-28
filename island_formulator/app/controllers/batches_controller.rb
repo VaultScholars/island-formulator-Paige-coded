@@ -7,6 +7,11 @@ class BatchesController < ApplicationController
     @batches = current_user.batches.includes(:recipe).order(made_on: :desc)
   end
 
+  def show
+    @recipe = Recipe.find(params[:id])
+    @batch = Batch.new(recipe: @recipe)
+  end
+
   # GET /batches/1 or /batches/1.json
   def show
     @batch = current_user.batches.find(params[:id])
@@ -28,24 +33,13 @@ class BatchesController < ApplicationController
   def create
     @batch = current_user.batches.build(batch_params)
 
-    if @batch.save
+  if @batch.save
       redirect_to batches_path, notice: "Batch was successfully logged."
-    else
-      render :new, status: :unprocessable_entity
-    end
+  else 
+         render :new, status: :unprocessable_entity
   end
-
-    respond_to do |format|
-      if @batch.save
-        format.html { redirect_to @batch, notice: "Batch was successfully created." }
-        format.json { render :show, status: :created, location: @batch }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @batch.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
+end
+   
   # PATCH/PUT /batches/1 or /batches/1.json
   def update
     respond_to do |format|
@@ -72,11 +66,11 @@ class BatchesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_batch
-      @batch = Batch.find(params.expect(:id))
+      @batch = Batch.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def batch_params
      params.require(:batch).permit(:recipe_id, :made_on, :notes)
+    end
   end
-end

@@ -9,6 +9,11 @@
   def show
   end
 
+  def show
+  @recipe = Recipe.find(params[:id])
+  @batch = current_user.batches.build(recipe: @recipe, made_on: Date.today)
+  end
+
   def new
     @recipe = current_user.recipes.build
     # Start with 5 empty ingredient slots

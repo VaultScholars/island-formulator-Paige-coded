@@ -1,6 +1,6 @@
 <div>
-  <h1 class="font-bold text-4xl">Dashboards#show</h1>
-  <p>Find me in app/views/dashboards/show.html.erb</p>
+  <h1 class="font-bold text-4xl"></h1>
+  <p></p>
 </div>
 
 <div class="w-full">
@@ -99,25 +99,5 @@
       <%= link_to "Create Recipe", new_recipe_path, class: "bg-white border border-gray-200 px-6 py-3 rounded-xl shadow-sm hover:shadow-md transition-all font-medium text-gray-700" %>
       <%= link_to "Log Production", new_batch_path, class: "bg-white border border-gray-200 px-6 py-3 rounded-xl shadow-sm hover:shadow-md transition-all font-medium text-gray-700" %>
     </div>
-  </div>
-</div>
-<div class="mt-12">
-  <h2 class="font-bold text-2xl mb-4">Suggested Recipes</h2>
-
-  <div class="bg-white shadow rounded-lg divide-y">
-    <% @suggested_recipes.each do |recipe| %>
-      <div class="p-4 flex justify-between items-center">
-        <div>
-          <%= link_to recipe.title, recipe, class: "text-blue-600 hover:underline font-medium" %>
-          <p class="text-xs text-green-600 font-medium">✔ Ready to make</p>
-        </div>
-      </div>
-    <% end %>
-
-    <% if @suggested_recipes.empty? %>
-      <div class="p-6 text-center">
-        <p class="text-gray-500">No recipes match your inventory yet.</p>
-      </div>
-    <% end %>
   </div>
 </div>
