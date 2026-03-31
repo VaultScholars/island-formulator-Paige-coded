@@ -31,7 +31,6 @@ class IngredientsController < ApplicationController
     else
       render :new, status: :unprocessable_entity
     end
-  end
 
     respond_to do |format|
       if @ingredient.save
@@ -86,7 +85,6 @@ class IngredientsController < ApplicationController
     def ingredient_params
   params.require(:ingredient).permit(:name, :category, :description, :photo)
     end
-end
  private
 
   def set_ingredient

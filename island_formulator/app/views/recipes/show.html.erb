@@ -25,6 +25,25 @@
   <%= link_to "Edit this recipe", edit_recipe_path(@recipe), class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
   <%= link_to "Back to recipes", recipes_path, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
   
+  <h2 class="text-xl font-bold mt-8 mb-4">Log a New Batch</h2>
+  <%= render 'batches/form', batch: @batch %>
+
+  <h2 class="text-xl font-bold mt-8 mb-4">Recent Batches</h2>
+
+<% if @batches.any? %>
+  <ul class="space-y-3">
+    <% @batches.each do |batch| %>
+      <li class="p-3 border rounded-lg bg-gray-50">
+        <strong><%= batch.made_on.strftime("%b %d, %Y") %></strong><br>
+        <span class="text-gray-600"><%= batch.notes.presence || "No notes" %></span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="text-gray-500 italic">No batches logged yet.</p>
+<% end %>
+<%= link_to "View All Batches", batches_path, class: "text-blue-600 underline" %>
+
   <%# Add this button to quickly log a batch from the recipe page %>
   <%= link_to "Log a New Batch", new_batch_path(recipe_id: @recipe.id), 
       class: "rounded-lg py-3 px-5 bg-green-600 text-white inline-block font-medium" %>
@@ -69,28 +88,5 @@
   </div>
 </div>
 
-<h2 class="text-xl font-bold mb-4">Log a Batch for <%= @recipe.name %></h2>
 
-<%= form_with(model: @batch, url: batches_path, local: true, class: "contents") do |form| %>
-  <% if @batch.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(@batch.errors.count, "error") %> prohibited this batch from being saved:</h2>
-      <ul class="list-disc ml-6">
-        <% @batch.errors.full_messages.each do |error| %>
-          <li><%= error %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <!-- Pass recipe_id hidden so Rails knows which recipe this batch belongs to -->
-  <%= form.hidden_field :recipe_id, value: @recipe.id %>
-
-  <!-- Default made_on to today -->
-  <%= form.date_field :made_on, value: Date.today, class: "mt-2 mb-2" %>
-
-  <!-- Optional notes -->
-  <%= form.text_area :notes, placeholder: "Add notes (optional)", class: "w-full border rounded p-2 mb-2" %>
-
-  <%= form.submit "Log Batch", class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
-<% end %>
+ 

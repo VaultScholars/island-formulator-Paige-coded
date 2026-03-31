@@ -7,23 +7,39 @@ class BatchesController < ApplicationController
     @batches = current_user.batches.includes(:recipe).order(made_on: :desc)
   end
 
-  def show
-    @recipe = Recipe.find(params[:id])
-    @batch = Batch.new(recipe: @recipe)
-  end
-
   # GET /batches/1 or /batches/1.json
   def show
     @batch = current_user.batches.find(params[:id])
-  end
+    # Build a new batch for the form
+    @recipe = @batch.recipe
+    @batch = current_user.batches.build(recipe: @recipe, made_on: Date.today)
 
-  # GET /batches/new
-  def new
-    @batch = current_user.batches.build(
-      recipe_id: params[:recipe_id],
-      made_on: Date.today
-    )
+  # Optionally, fetch recent batches
+    @batches = @recipe.batches.order(made_on: :desc).limit(5)
   end
+  
+
+  def create
+  @batch = current_user.batches.build(batch_params)
+
+  @batch.recipe_id ||= params[:batch][:recipe_id] || params[:recipe_id]
+
+  if @batch.save
+    redirect_to batches_path, notice: "Batch was successfully logged."
+  else
+    render :new, status: :unprocessable_entity
+  end
+end
+
+def new
+  # Build a batch for the current user
+  @batch = current_user.batches.build(made_on: Date.today)
+
+  # Prefill recipe_id if passed
+  if params[:recipe_id].present?
+    @batch.recipe_id = params[:recipe_id]
+  end
+end
 
   # GET /batches/1/edit
   def edit

@@ -19,6 +19,8 @@ class Recipe < ApplicationRecord
   
   # Ensure a recipe has at least one ingredient
   validate :must_have_at_least_one_ingredient
+
+  scope :suggested, -> { order(created_at: :desc).limit(3) }
   
   private
   

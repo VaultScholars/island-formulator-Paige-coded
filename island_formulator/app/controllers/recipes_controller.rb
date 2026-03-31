@@ -5,6 +5,11 @@
   def index
     @recipes = current_user.recipes
   end
+  
+  def index
+  @recipes = Recipe.all
+  @suggested_recipes = Recipe.suggested
+end
 
   def show
   end
@@ -12,6 +17,7 @@
   def show
   @recipe = Recipe.find(params[:id])
   @batch = current_user.batches.build(recipe: @recipe, made_on: Date.today)
+  @batches = @recipe.batches.order(made_on: :desc)
   end
 
   def new
